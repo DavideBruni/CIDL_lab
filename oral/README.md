@@ -3,39 +3,26 @@
 ## a. Autograd and SGD
 
 - **a.01** What is the principle behind using Stochastic Gradient Descent (SGD) for optimizing a function w.r.t. its parameters?
-    **Response** Dato che il costo computazionale dell'algoritmo del Gradiente Descendente è O(m), man mano che le dimensioni del set di addestramento crescono, il tempo necessario per compiere un singolo passo di gradiente diventa proibitivamente lungo, e quindi si utilizza lo SGD. **L'idea alla base del gradiente stocastico è che il gradiente è un'exepctation.** Nello specifico, ad ogni passo dell'algoritmo, possiamo estrarre casualmente un minibatch di esempi di dimensione \(m'\) dal set di addestramento. La stima del gradiente viene formata come segue:
-
-\[
-\hat{g} = \frac{1}{m'} \sum_{i \in m'} \nabla J(\theta; x^{(i)}, y^{(i)})
-\]
-
+    **Response** Dato che il costo computazionale dell'algoritmo del Gradiente Descendente è O(m), man mano che le dimensioni del set di addestramento crescono, il tempo necessario per compiere un singolo passo di gradiente diventa proibitivamente lungo, e quindi si utilizza lo SGD. **L'idea alla base del gradiente stocastico è che il gradiente è un'exepctation.** Nello specifico, ad ogni passo dell'algoritmo, possiamo estrarre casualmente un minibatch di esempi di dimensione m' dal set di addestramento. La stima del gradiente viene formata come segue:
+$$\[\hat{g} = \frac{1}{m'} \sum_{i \in m'} \nabla J(\theta; x^{(i)}, y^{(i)})\]$$
 L'algoritmo del gradiente stocastico poi segue il gradiente stimato verso il basso:
-
-\[
-\theta_{t+1} = \theta_t - \eta \nabla L(\theta_t; x^{(i)}, y^{(i)})
-\]
-
-Dove:
-- \(\eta\) è il tasso di apprendimento.
-- \(\nabla L(\theta_t; x^{(i)}, y^{(i)})\) rappresenta il gradiente della funzione di perdita \(L\) rispetto al parametro \(\theta\), valutato su \(x^{(i)}\) e \(y^{(i)}\) dell'attuale campione.
-
+$$\[\theta_{t+1} = \theta_t - \eta \nabla L(\theta_t; x^{(i)}, y^{(i)})\]$$
+Dove eta è il tasso di apprendimento.
 L'algoritmo di ottimizzazione non garantisce di raggiungere un minimo locale in un tempo ragionevole, ma spesso trova un valore molto basso della funzione di costo abbastanza rapidamente da essere utile. È il principale modo per addestrare modelli lineari su set di dati molto grandi.
 
 - **a.02** Explain the concept of function composition in neural networks and how it relates to layers in a model.
-    **Response**: Il concetto di composizione delle funzioni nelle reti neurali si riferisce alla pratica di combinare più strati (layers) per formare una rete neurale complessa. In una rete neurale, ogni strato è costituito da neuroni e ognuno di questi strati esegue una trasformazione matematica sui dati in input. La composizione di queste trasformazioni attraverso gli strati della rete rappresenta la funzione complessiva che la rete sta apprendendo. Quando diciamo "composizione delle funzioni" in questo contesto, intendiamo che l'output di uno strato diventa l'input per il successivo. Quindi, se hai uno strato \(f_1\) seguito da uno strato \(f_2\), la composizione di \(f_1\) e \(f_2\) è \(f_2(f_1(x))\), dove \(x\) è l'input originale.
-    Ad esempio, se \(x\) rappresenta l'input di una rete neurale, l'output dello strato \(f_1\) sarà \(f_1(x)\), e l'output totale della rete dopo la composizione con \(f_2\) sarà \(f_2(f_1(x))\). Questa composizione di strati permette alla rete neurale di apprendere rappresentazioni più complesse e astratte dei dati. Ogni strato può catturare diversi aspetti o feature dei dati di input, e la composizione di più strati consente alla rete di apprendere rappresentazioni sempre più sofisticate man mano che si sposta attraverso gli strati.
+    **Response**: Il concetto di composizione delle funzioni nelle reti neurali si riferisce alla pratica di combinare più strati (layers) per formare una rete neurale complessa. In una rete neurale, ogni strato è costituito da neuroni e ognuno di questi strati esegue una trasformazione matematica sui dati in input. La composizione di queste trasformazioni attraverso gli strati della rete rappresenta la funzione complessiva che la rete sta apprendendo. Quando diciamo "composizione delle funzioni" in questo contesto, intendiamo che l'output di uno strato diventa l'input per il successivo. Quindi, se hai uno strato f1 seguito da uno strato f2, la composizione di f1 e f2 è f2(f1(x)), dove x è l'input originale.
+  Ad esempio, se x rappresenta l'input di una rete neurale, l'output dello strato f1 sarà f1(x), e l'output totale della rete dopo la composizione con f2 sarà f2(f1(x)). Questa composizione di strati permette alla rete neurale di apprendere rappresentazioni più complesse e astratte dei dati. Ogni strato può catturare diversi aspetti o feature dei dati di input, e la composizione di più strati consente alla rete di apprendere rappresentazioni sempre più sofisticate man mano che si sposta attraverso gli strati.
 
 - **a.03 / a.04** How do you calculate the derivative of a composed function w.r.t. its inputs? Describe the unfolding process of a function and its impact on derivative calculation.
     **Response**: Usando la **chain rule**. Cioè usando la moltiplicazione delle derivate parziali (unfolding)
-    \[
-    \frac{do}{di} = \frac{do}{dw_2} \cdot \frac{dw_2}{dw_1} \cdot \frac{dw_1}{di}
-    \]
+    $$\[\frac{do}{di} = \frac{do}{dw_2} \cdot \frac{dw_2}{dw_1} \cdot \frac{dw_1}{di}\]$$
 
     Dove:
-    - \(o\) è l'output.
-    - \(i\) è l'input.
-    - \(w_1\) è la funzione più interna
-    - \(w_2\) la funzione che prende l'output di w_1.
+    - o è l'output.
+    - i è l'input.
+    - w1 è la funzione più interna
+    - w2 la funzione che prende l'output di w1.
     
     L'effetto dell'unfolding è quello di semplificare il calcolo delle derivate, specialmente in contesti in cui le funzioni coinvolte sono intricate.
 
