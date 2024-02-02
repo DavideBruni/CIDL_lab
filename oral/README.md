@@ -1,4 +1,4 @@
-# Response to almost all qestions you must know the answers to before attending the exam (questions taken from Galatolo's repository) 
+# Response to almost all questions you must know the answers to before attending the exam (questions taken from Galatolo's repository) 
 
 ## a. Autograd and SGD
 
