@@ -64,9 +64,21 @@ L'algoritmo di ottimizzazione non garantisce di raggiungere un minimo locale in 
   - implementare il metodo `__init__`
   - implementare il metodo `forward(self,input)`. In questo metodo avviene la computazione (il passo forward della rete neurale).
 Tra i metodo presenti ricordiamo `parameters` (restituisce un iteratore sui parametri) e `to` (sposta il modulo da device ad un altro, ad esempio da CPU a GPU).
-- **b.10** Discuss the training process in PyTorch using the Stochastic Gradient Descent (SGD) algorithm.
-- **b.11** Explain the concept and application of batch size in model training.
-- **b.12** How do you implement a simple linear regression model in PyTorch?
+- **b.11** Explain the concept and application of batch size in model training. <br>
+**Response**: Meglio utilizzare un sottoinsieme del dataset piuttosto che calcolare la Loss Function (e il gradiente) su tutto il Dataset che può essere molto grande.
+- **b.12** How do you implement a simple linear regression model in PyTorch? <br>
+   **Response**: Dopo aver creato un Modulo con un unico parametro w, e aver instanziato l'oggetto:
+   ```optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
+      dl = torch.utils.data.DataLoader(dataset = ds,batch_size=8)
+      loss_fn = torch.nn.MSELoss()
+      for epoch in range(0, epochs):
+         for batch in dataloader:
+            y_model = model(batch.input)
+            error = loss_fn(y_model, batch.target)
+            optimizer.zero_grad()      # per azzerare i gradienti
+            error.backward()
+            optimizer.step()
+   ```
 
 ## c. Convolutional Neural Networks and ResNets
 
