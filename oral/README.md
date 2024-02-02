@@ -50,7 +50,7 @@ L'algoritmo di ottimizzazione non garantisce di raggiungere un minimo locale in 
   ![Broadcasting](./images/broadcasting.png)
 - **b.03** What is the difference between the 'reshape' and 'view' methods in tensor manipulation? <br>
   **Response** Entrambe servono per manipolare le dimensione del tensore, ma 'reshape' modifica la dimensione del tensore in memoria (rearrange più lento, ma accesso più veloce), mentre 'view' non cambia la shape in memoria, ma solo l'indexing (acesso più lento ma rearragne più veloce). In pytroch, il rearrange segue il row-major order.
-    ![Tensore rearrange](./images/tensorAlgebra.png)
+    ![Tensore rearrange](./images/rearrange.png)
 - **b.05**/**b.06** Describe the process of creating a custom dataset using 'torch.utils.data.Dataset'. What is the 'torch.utils.data.IterableDataset' and how is it used? <br>
 **Response** Per creare un custom Dataset bisogna:
   - creare una classe derivata da torch.utils.data.Dataset
@@ -82,37 +82,68 @@ Tra i metodo presenti ricordiamo `parameters` (restituisce un iteratore sui para
 
 ## c. Convolutional Neural Networks and ResNets
 
-- **c.01** What is a CNN?
-- **c.02** How does the convolution operation work in CNNs?
-- **c.03** Explain the significance of kernel size, padding, and stride in convolutional layers.
-- **c.04** What are the roles of pooling layers in CNNs?
-- **c.05** Discuss the function of activation functions in CNNs.
-- **c.06** How does a Conv2D layer in PyTorch operate?
-- **c.07** Explain the concept of channels in CNNs and their significance.
-- **c.08** What are skip connections in CNNs, and how do they function?
-- **c.09** Define a Residual Network (ResNet) and its advantages in deep learning.
-- **c.10** Draw a diagram of a ResNet and its computational graph
-- **c.11** Explain the concept of feature maps in CNNs
-- **c.12** Describe the architecture of a typical CNN.
-- **c.13** What are the common challenges in training deep CNNs?
-- **c.14** How do residual blocks in ResNets mitigate the vanishing gradient problem?
-- **c.15** Discuss the application of CNNs in image classification tasks, with an example like MNIST.
-- **c.16** How does the structure of a ResNet differ from a standard CNN?
+- **c.01** What is a CNN? <br>
+**Response**: Una Rete Neurale Convoluzionale, nota anche come CNN o ConvNet, è una classe di reti neurali specializzata nell'elaborazione di dati con una topologia a griglia, come ad esempio un'immagine. Il nome "convolutional neural network" indica che la rete utilizza un'operazione matematica chiamata convoluzione. <br>
+ Le CNN hanno 3 tipi principali di layer:
+- **Convolutional layer**, dove l'operazione di convoluzione tra l'immagine e un kernel viene eseguita
+- **Pooling layer**, è un layer opzionale, 
+- **Fully-connected (FC) layer**, qui vengono applicate trasformazione lineari al vettore di input attraverso una matrice di pesi. Successivamente, viene applicata una trasformazione non lineare al prodotto tramite una funzione di attivazione non lineare f.
+- **c.02** How does the convolution operation work in CNNs? <br>
+**Response**: Il kernel "scorre" sull'immagine. Se l'input è un tensore in 3 dimensioni, il kernel è a sua volta di 3 dimensioni, dove l'ultima dimensione deve matchare con quella di input. Dunque se l'Input ha dimensione H x W x D, il kernel avrà dimensione P x Z x D e l'output della convoluzione avrà come dimensione K x T x 1. Se vogliamo avere D come ultima dimensione e non 1, dobbiamo usare D kernel.
+![CNN](./images/cnn.png)
+- **c.03**/**c.04** Explain the significance of kernel size, padding, and stride in convolutional layers. What are the roles of pooling layers in CNNs? <br>
+**Response**: 
+- Il padding aggiunge pixel extra intorno all'input, necessario per essere sicuri che la convoluzione processi bene tutto l'input.
+- Lo stride si riferisce allo "step-size", cioè di quanti pixel il centro del kernel deve muoversi sull'input.
+La dimensione dell'output dipende da questi due fattori (W = kernel size, F = input size): 
+![Output formula](./images/formula.png)
+Uno strato di pooling è uno strato che applica un'operazione di riduzione su una finestra di scorrimento della convoluzione. Esistono vari tipi di pooling come ad esempio:
+![Max pool](./images/max-pool.png)
+Comunque è consigliabile non usare operatori di pooling, dato che avviene una perdita di informazione e hanno una dimensione fissa. Gli operatori di pooling sono sostituibili con un aumento della dimensione del kernel o con l'utilizzo di stride e padding.
+- **c.05** Discuss the function of activation functions in CNNs. <br>
+**Response** Dato che la convoluzione è un'operazione lineare, fare una composizione di Convolutional Layer sarebbe uguale a eseguire una sola convoluzione, motivo per il quale è necessario inserire funzioni di attivazione non lineari come sigmoid function o ReLU.
+- **c.08** What are skip connections in CNNs, and how do they function? <br> 
+**Response** Le Skip-connection mitigano il problema del vanishing gradient durante il training della rete. Ovviamente bisogna gestire la somma dell'input con l'output (le dimensioni potrebbero essere diverse)
+- **c.09**/**c.10** Define a Residual Network (ResNet) and its advantages in deep learning.Draw a diagram of a ResNet and its computational graph <br>
+**Response** ResNet è un architettura di deep learning progettata per allenare very deep NNs introducendo il concetto di residual blocks.
+![Standard ResNet](./images/resNet.png)
+Nota: Nel percorso inferiore non è importante cosa sia la convoluzione, l'importante è che non cambi la shape. Viene eseguita la convoluzione e la batch normalization se la dim di input e quella di output sono diverse.
+- **c.12** Describe the architecture of a typical CNN. <br> 
+**Response** : Vedi risposta c.1.
+- **c.15** Discuss the application of CNNs in image classification tasks, with an example like MNIST. <br>
+**Response**: Le reti neurali convoluzionali (CNN) sono ampiamente utilizzate per compiti di classificazione delle immagini. Questo tipo di rete è progettato per catturare pattern spaziali nelle immagini sfruttando l'idea di convoluzione.Nel contesto della classificazione delle immagini, le CNN sono particolarmente efficaci. Il primo strato di una CNN è solitamente un layer di convoluzione. Questo strato applica diversi filtri alle immagini di input, cercando di rilevare diverse caratteristiche come linee, curve, o angoli. Questo processo si ripete attraverso diversi strati di convoluzione. Dopo i layer convoluzionali, viene solitamente aggiunto un insieme di layer completamente connessi per combinare le informazioni estratte e produrre l'output finale di classificazione.
 
 ## d. Recurrent Neural Networks
 
-- **d.01** What is a Recurrent Neural Network (RNN), and how does it work?
-- **d.02** Explain the concept of time-varying inputs and outputs in RNNs.
-- **d.03** Describe two major application families of RNNs: Sequence to Task and Sequence to Sequence.
-- **d.04** How do RNNs capture temporal dependencies and patterns in sequences?
-- **d.05** Discuss the vanishing gradient problem in RNNs and its impact on learning from long sequences.
-- **d.06**  Draw a diagram of a RNN and its computational graph
-- **d.07** What are Long Short-Term Memory (LSTM) networks and how do they address the vanishing gradient problem?
-- **d.08** What are Gated Recurrent Unit (GRU) networks and how do they differ from LSTMs?
-- **d.09** Describe the functionality of the three gates in GRUs: reset, update, and new gate.
+- **d.01** What is a Recurrent Neural Network (RNN), and how does it work? <br> 
+**Response** Una RNN è un tipo di NN che applica gli stessi pesi ricorsivamente su un Time-Varying Input per generare un time-variable output. Gli ingressi possono avere lunghezza variabile. Nota importante è che, dato che vengono applicati gli stessi pesi, i parametri vengono condivisi (quindi abbiamo un numero minore di parametri) e che la RNN è in grado di mantenere uno stato interno (una sorta di memoria) il quale viene usato per generare gli output.
+- **d.02** Explain the concept of time-varying inputs and outputs in RNNs. <br>
+**Response**: 
+- Input Time-Varying (Ingressi Variabili nel Tempo): Nei modelli RNN, ogni passo temporale di input è considerato separatamente. Ad esempio, se abbiamo una sequenza temporale di lunghezza T, con input x₁, x₂, ..., xₜ, la RNN elabora questi input sequenzialmente. In pratica, ciò consente alla rete di catturare le dipendenze temporali nei dati, considerando l'ordine in cui gli input sono presentati.
+- Output Time-Varying (Uscite Variabili nel Tempo): Allo stesso modo, le uscite di una RNN possono variare nel tempo. Ogni passo temporale produce un'uscita specifica. Questo è particolarmente utile quando si lavora con sequenze di output, come la previsione di un valore in ogni momento successivo in una serie temporale. La rete può imparare a generare output che dipendono dai dati di input precedenti, sfruttando la sua capacità di mantenere una memoria interna delle informazioni passate (hidden state).
+- **d.03** Describe two major application families of RNNs: Sequence to Task and Sequence to Sequence.<br>
+**Response**:
+- Seq2Task: usata principalmente per catturare pattern e dipendenze all'interno di sequenze (usato per classificazione o regressione).
+- Seq2seq: Maggiore applicazione nel campo del text-summarization, machine tranlsation e speech2text.
+- **d.05** Discuss the vanishing gradient problem in RNNs and its impact on learning from long sequences. <br>
+**Response**: Il problema è che dovendo fare la back-propagation della funzione di Loss, dobbiamo fare "l'enroll" del computational graph (come se fossero tanti nodi in maniera sequenziale). Dunque più è lunga la sequenza, più ricorsioni abbiamo, più nodi abbiamo --> il computational graph è più lungo, e dato che l'uscita di ogni stato dipende dal precedente, avremmo una produttoria nel computational graph fattori sempre più piccoli. Dei metodi per provare a mitigare il vanishing gradiente problem sono le LSTM networks e le GRU networks.
+- **d.07** What are Long Short-Term Memory (LSTM) networks and how do they address the vanishing gradient problem? <br>
+**Response**:
+![LSTM](./images/lstm.png)
+![LSTM](./images/lstm-formula.png)
+Notes: 
+  -	Hidden state possono assumare solo valori tra -1, 1 (è l'output di prodotto tra tanh e outputGate)
+  - Output appartiene a [0,1]^h
+  - Forget gate: dato che è l'output di una sigmoid function, quando il valore è 0, la memoria è dimenticabile!
+
+- **d.08** What are Gated Recurrent Unit (GRU) networks and how do they differ from LSTMs? <br>
+**Response**: simili a LSTM, ma hanno una struttura più semplice con soli 3 gate: reset gate, update gate e new gate.
+![LSTM](./images/gru.png)
+![LSTM](./images/gru-formula.png)
+
 - **d.10** Explain how to train an RNN for a sequence classification problem.
+
 - **d.11** Discuss the considerations for setting up RNNs, LSTMs, and GRUs for a classification task
-- **d.12** Discuss the challenges in training RNNs and how they can be mitigated.
 
 ## e. Autoencoders and VAEs
 
