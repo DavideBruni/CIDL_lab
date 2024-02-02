@@ -2,7 +2,7 @@
 
 ## a. Autograd and SGD
 
-- **a.01** What is the principle behind using Stochastic Gradient Descent (SGD) for optimizing a function w.r.t. its parameters?
+- **a.01** What is the principle behind using Stochastic Gradient Descent (SGD) for optimizing a function w.r.t. its parameters? <br>
     **Response** Dato che il costo computazionale dell'algoritmo del Gradiente Descendente è O(m), man mano che le dimensioni del set di addestramento crescono, il tempo necessario per compiere un singolo passo di gradiente diventa proibitivamente lungo, e quindi si utilizza lo SGD. **L'idea alla base del gradiente stocastico è che il gradiente è un'exepctation.** Nello specifico, ad ogni passo dell'algoritmo, possiamo estrarre casualmente un minibatch di esempi di dimensione m' dal set di addestramento. La stima del gradiente viene formata come segue:
 $$\[\hat{g} = \frac{1}{m'} \sum_{i \in m'} \nabla J(\theta; x^{(i)}, y^{(i)})\]$$
 L'algoritmo del gradiente stocastico poi segue il gradiente stimato verso il basso:
@@ -10,11 +10,11 @@ $$\[\theta_{t+1} = \theta_t - \eta \nabla L(\theta_t; x^{(i)}, y^{(i)})\]$$
 Dove eta è il tasso di apprendimento.
 L'algoritmo di ottimizzazione non garantisce di raggiungere un minimo locale in un tempo ragionevole, ma spesso trova un valore molto basso della funzione di costo abbastanza rapidamente da essere utile. È il principale modo per addestrare modelli lineari su set di dati molto grandi.
 
-- **a.02** Explain the concept of function composition in neural networks and how it relates to layers in a model.
+- **a.02** Explain the concept of function composition in neural networks and how it relates to layers in a model.<br>
     **Response**: Il concetto di composizione delle funzioni nelle reti neurali si riferisce alla pratica di combinare più strati (layers) per formare una rete neurale complessa. In una rete neurale, ogni strato è costituito da neuroni e ognuno di questi strati esegue una trasformazione matematica sui dati in input. La composizione di queste trasformazioni attraverso gli strati della rete rappresenta la funzione complessiva che la rete sta apprendendo. Quando diciamo "composizione delle funzioni" in questo contesto, intendiamo che l'output di uno strato diventa l'input per il successivo. Quindi, se hai uno strato f1 seguito da uno strato f2, la composizione di f1 e f2 è f2(f1(x)), dove x è l'input originale.
   Ad esempio, se x rappresenta l'input di una rete neurale, l'output dello strato f1 sarà f1(x), e l'output totale della rete dopo la composizione con f2 sarà f2(f1(x)). Questa composizione di strati permette alla rete neurale di apprendere rappresentazioni più complesse e astratte dei dati. Ogni strato può catturare diversi aspetti o feature dei dati di input, e la composizione di più strati consente alla rete di apprendere rappresentazioni sempre più sofisticate man mano che si sposta attraverso gli strati.
 
-- **a.03 / a.04** How do you calculate the derivative of a composed function w.r.t. its inputs? Describe the unfolding process of a function and its impact on derivative calculation.
+- **a.03 / a.04** How do you calculate the derivative of a composed function w.r.t. its inputs? Describe the unfolding process of a function and its impact on derivative calculation.<br>
     **Response**: Usando la **chain rule**. Cioè usando la moltiplicazione delle derivate parziali (unfolding)
     $$\[\frac{do}{di} = \frac{do}{dw_2} \cdot \frac{dw_2}{dw_1} \cdot \frac{dw_1}{di}\]$$
 
@@ -26,34 +26,47 @@ L'algoritmo di ottimizzazione non garantisce di raggiungere un minimo locale in 
     
     L'effetto dell'unfolding è quello di semplificare il calcolo delle derivate, specialmente in contesti in cui le funzioni coinvolte sono intricate.
 
-- **a.06** Explain the derivation process for a function involving a binary operator and how it splits the derivation flow.
+- **a.06** Explain the derivation process for a function involving a binary operator and how it splits the derivation flow.<br>
     **Response:** In R ogni operatore binario chiuso (4 operazioni di base) creano una somma di due flussi di derivate (pensa alla derivata della somma o del prodotto ad esempio).
-- **a.07** What is reverse mode differentiation, and how is it applied to compute derivatives in computational graphs?
+- **a.07** What is reverse mode differentiation, and how is it applied to compute derivatives in computational graphs?<br>
     **Response**: Per calcolare la derivata dell'output w.r.t. ad un input devi trovare tutti i possibili percorsi dall'output all'input e moltiplicare i valori parziali su ciascun percorso (ogni percorso corrisponde a una composizione di funzioni) e sommare tutti i risultati (ogni split rappresenta la presenz adi un operatore binario).
     **Nel reverse mode si calcola la derivata parziale di *un output* rispetto ad *ogni input* in passaggio**
 
-- **a.08** Discuss the concept of forward path and backward path in the context of computational graphs and differentiation.
+- **a.08** Discuss the concept of forward path and backward path in the context of computational graphs and differentiation.<br>
     **Response**: Funziona all'esatto opposto rispetto al reverse mode. **Si calcolano le derivate parziali di *tutti gli output* rispetto a *un input* in un passaggio**.
 
-- **a.09** Describe the differences between forward mode differentiation and reverse mode differentiation in terms of computational efficiency and application.
+- **a.09** Describe the differences between forward mode differentiation and reverse mode differentiation in terms of computational efficiency and application.<br>
     **Response**: Il reverse mode è l'ideale quando la dimensione dell'input è molto maggiore di quella dell'output (quindi come capita quasi sempre nel machine learning). Inoltre su ogni ramo abbiamo un solo derivative value.
 
 
 ## b. Tensor algebra and PyTorch
 
-- **b.01** Explain the concept of a tensor in PyTorch.
-- **b.02** How do the addition and multiplication between tensors work?
-- **b.03** What is the difference between the 'reshape' and 'view' methods in tensor manipulation?
-- **b.04** Explain the use of reduction operations like '.sum', '.mean', '.max', etc., in tensor algebra.
-- **b.05** Describe the process of creating a custom dataset using 'torch.utils.data.Dataset'.
-- **b.06** What is the 'torch.utils.data.IterableDataset' and how is it used?
-- **b.07** How does the 'torch.utils.data.DataLoader' work in PyTorch?
-- **b.08** Describe the structure and purpose of the 'torch.nn.Module' class.
-- **b.09** What are the key methods in a PyTorch module, and how are they implemented?
+- **b.01** Explain the concept of a tensor in PyTorch. <br>
+**Response** Un tensor in PyTorch è un array multi-dimensionale di numeri che generalizza scalari, vettori e matrice.
+  ![Tensore](./images/tensor.png)
+- **b.02** How do the addition and multiplication between tensors work? <br>
+   **Response* ![Tensor Algebra](./images/tensorAlgebra.png) <br>
+   In PyTorch è possibile fare operazioni tra tensori di dimensioni diverse grazie al broadcasting.
+  ![Broadcasting](./images/broadcasting.png)
+- **b.03** What is the difference between the 'reshape' and 'view' methods in tensor manipulation? <br>
+  **Response** Entrambe servono per manipolare le dimensione del tensore, ma 'reshape' modifica la dimensione del tensore in memoria (rearrange più lento, ma accesso più veloce), mentre 'view' non cambia la shape in memoria, ma solo l'indexing (acesso più lento ma rearragne più veloce). In pytroch, il rearrange segue il row-major order.
+    ![Tensore rearrange](./images/tensorAlgebra.png)
+- **b.05**/**b.06** Describe the process of creating a custom dataset using 'torch.utils.data.Dataset'. What is the 'torch.utils.data.IterableDataset' and how is it used? <br>
+**Response** Per creare un custom Dataset bisogna:
+  - creare una classe derivata da torch.utils.data.Dataset
+  - implementare i metodi `__init__`,`__len__` e `__getitem__` per creare un dataset che segue il map-model
+  - per creare un dataset iterable invece bisogna implementare i metodi `__iter__`, `__next__` che restituiscono rispettivamente `self` e il prossimo data point 
+- **b.07** How does the 'torch.utils.data.DataLoader' work in PyTorch? <br>
+**Response**: Il Dataloader combina il dataset e il sampler e fornisce un iterable sul dataset (supporta entrambi i tipi di dataset). Utile perchè ha la funzione di automatica batching. Generalmente usato come `torch.utils.data.DataLoader(dataset=ds, batch_size=BATCH_SIZE, shuffle=True)`
+- **b.08**/**b.09** Describe the structure and purpose of the 'torch.nn.Module' class. What are the key methods in a PyTorch module, and how are they implemented? <br>
+**Response**: Indubbiamente il modulo più importante e alla base della costruzione di reti neurali. Ogni modello ha dei parametri che sono wrappati in un tensore `torch.nn.Parameter`. Alcuni dei moduli già forniti sono `torch.nn.Linear, torch.nn.ReLU. torch.nn.Sequential`. <br> Per creare un modulo custom:
+  - creare una classe che eredita da `torch.nn.Module`
+  - implementare il metodo `__init__`
+  - implementare il metodo `forward(self,input)`. In questo metodo avviene la computazione (il passo forward della rete neurale).
+Tra i metodo presenti ricordiamo `parameters` (restituisce un iteratore sui parametri) e `to` (sposta il modulo da device ad un altro, ad esempio da CPU a GPU).
 - **b.10** Discuss the training process in PyTorch using the Stochastic Gradient Descent (SGD) algorithm.
 - **b.11** Explain the concept and application of batch size in model training.
 - **b.12** How do you implement a simple linear regression model in PyTorch?
-- **b.13** Discuss the implementation of a custom model in PyTorch and the steps to train it on a dataset.
 
 ## c. Convolutional Neural Networks and ResNets
 
