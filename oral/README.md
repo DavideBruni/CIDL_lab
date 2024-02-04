@@ -207,12 +207,33 @@ La rappresentazione continua in uscita dall'encoder viene riorganizzata in una m
 
 ## g. Generative Adversarial Networks
 
-- **g.01** What are Generative Adversarial Networks?
-- **g.02** Describe the architecture of GANs, including the roles of the generator and discriminator.
-- **g.03** Explain how the discriminator functions as a binary classifier in GANs.
-- **g.04** Outline the steps involved in training the discriminator in a GAN.
-- **g.05** Explain the training process of the generator in a GAN.
-- **g.06** Draw a diagram of a GAN and its computational graph
+- **g.01**/**g.02**/**g.03** What are Generative Adversarial Networks? Describe the architecture of GANs, including the roles of the generator and discriminator. Explain how the discriminator functions as a binary classifier in GANs. <br>
+**Reesponse**:  è un architettura formata da **due reti neurali**: un *generatore* e un *discriminatore*. 
+![GAN](./images/gan-base.png) <br>
+Il generatore è allenato per **ingannare il discriminatore**. Prende del rumore random come input e ha come obiettivo quello di generare un'immagine tale che, quando questa viene passata al discriminatore, viene classificata come reale. <br>
+Il discriminatore è allenato come un **classificatore binario**. Data un'immagine in input, deve distinguere tra reale e fake.
+- **g.04**/**g.05** Outline the steps involved in training the discriminator in a GAN. Explain the training process of the generator in a GAN. <br>
+**Response**: As general steps: <br>
+![GAN](./images/gan-train.png) <br>
+Nota: gli optimizer usati sono due istanze diverse (possono essere lo stesso tipo di optimizer o no, è indifferente). <br>
+Train the **discriminator**, details: 
+- Random sample di dati reali dal sample
+- Genera dati finti usando il generatore
+- Dai in ingresso i dati reali al discriminatore e calcola l'errore rispetto alla label Real
+- Dai in ingresso i dati fake al discriminatore e calcola l'error rispetto alla label Fake
+- Calcola la media dei due errori
+- Calcola il gradiente dell'errore e aggiorna i pesi del discriminatore <br>
+'''
+loss = (fake_loss + real_loss) / 2    
+loss.backward()
+optimizer.step()
+'''
+<br>
+Train the **generator**, details: 
+- Genera dati finti usando il generatore
+- Dai in ingresso i dati fake al discriminatore e calcola l'error rispetto alla label **Real**
+- Calcola il gradiente dell'errore e aggiorna i pesi del generatore
+
 - **g.07** What is an Auxiliary Classifier GAN (ACGAN), and how does it differ from standard GANs?
 - **g.08** Discuss the challenges in training GANs and strategies to overcome them.
 - **g.09** Describe the process of training a Deep Convolutional GAN (DCGAN) on the MNIST dataset.
