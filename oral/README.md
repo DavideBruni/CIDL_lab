@@ -1,4 +1,4 @@
-# Response to almost all qestions you must know the answers to before attending the exam (questions taken from Galatolo's repository) 
+# Response to almost all questions you must know the answers to before attending the exam (questions taken from Galatolo's repository) 
 
 ## a. Autograd and SGD
 
@@ -147,33 +147,63 @@ Notes:
 
 ## e. Autoencoders and VAEs
 
-- **e.01** What is an autoencoder, and what are its primary components?
-- **e.02** Describe the roles of the encoder and decoder in an autoencoder.
-- **e.03** What is meant by the "latent space" in an autoencoder?
-- **e.04** How does an autoencoder learn a compact representation of input data?
-- **e.05** Discuss the concept of reconstruction error in autoencoders.
-- **e.06** What is a denoising autoencoder, and how does it differ from a traditional autoencoder?
-- **e.07** What are Variational Autoencoders, and how do they differ from regular autoencoders?
-- **e.08** How does the Reparametrization Tick work?
-- **e.09** Draw a diagram of a VAE and its computational graph
-- **e.10** Why VAEs are a 'generative' architecture?
-- **e.11** What is the Kullback-Leibler divergence, and how is it used in VAEs?
-- **e.12** Describe a practical implementation of training a simple autoencoder on the MNIST dataset.
-- **e.13** Explain the procedure for training a Variational Autoencoder on the MNIST dataset.
-- **e.14** How does the 'Face Swap' algorithm work?
+- **e.01**/**e.02** What is an autoencoder, and what are its primary components?Describe the roles of the encoder and decoder in an autoencoder. <br>
+  **Response**: Un autoencoder è un tipo di rete neural progettata per l'unsupervised learning. è composto da due componenti principali: l'encoder e il decoder. L'obiettivo è quello di imparare una rappresentazione compatta dell'input.<br>
+  L'encoder copmrime l'input in una loer-dimension rappresentation (chiamata **Latent space**).  <br>
+  Il decoder ricostruisce l'input originale a partire dallo spazio latente.
+  ![Autoencoder](./images/autoencoders.png)
+- **e.04**/- **e.05** Discuss the concept of reconstruction error in autoencoders. How does an autoencoder learn a compact representation of input data? <br>
+  ![Autoencoder training](./images/autoencoders-train.png)
+
+- **e.06** What is a denoising autoencoder, and how does it differ from a traditional autoencoder? <br>
+**Response**: è una variante del traditional AE. L'obiettivo è quello di imparare una rappresentazione robusta della struttura sottostante, rimuovendo il rumore. Possiamo vedere l'architettura come: <br>
+![Denoising AE](./images/denoisingAE.png)
+- **e.07** What are Variational Autoencoders, and how do they differ from regular autoencoders? <br>
+**Response**: è una variante del traditional AE, il cui obiettivo non è solo imparare una rappresentazione compatta dei dati ma anche quello di **generare nuovi punti a partire dalla rappresentazione imparata**. I VAE usano un **approccio stocastico**.
+![VAE](./images/vae.png)
+- **e.08** How does the Reparametrization Trick work? <br>
+**Response**: Dato che il random sample non è un'operazione differenziabile, abbiamo bisogno di un trick per poter fare la backpropagation, la base del trick è:
+![Reparametrization](./images/trick-formula.png) <br>
+L'architettura diventa: <br>
+![Reparametrization architecture](./images/trick.png) <br>
+**ATTENZIONE: Tieni a mente che mu e sigma sono due parametri che la rete deve imparare! **
+- **e.10** Why VAEs are a 'generative' architecture? <br> 
+**Response**: perchè la rete imparara una rappresentazione stocastica dei dati.
+- **e.11** What is the Kullback-Leibler divergence, and how is it used in VAEs? <br>
+La KL divergence è una misura di quanto due distribuzioni di probabilità differiscono. Nel contesto degli AE è usata come **regolarizzazione** durante il **training**: nello specifico, serve per incoraggiare la rete a imparare una **distribuzione multivaraita non correlata**, i.e:
+![Uncorrelated mulitvariate representation](./images/umr.png)
+- **e.14** How does the 'Face Swap' algorithm work? <br>
+![Face swap](./images/faceswap.png)
 
 ## f. Vector Quantized Variational Autoencoders
 
-- **f.01** What is a Vector Quantized Variational Autoencoder (VQ-VAE)?
-- **f.02** Explain the process of mapping input data to a continuous latent space and then to discrete codes in a VQ-VAE.
-- **f.03** How does the vector quantization process work in a VQ-VAE, and what is the role of the codebook?
-- **f.04** How does the quantization trick work?
-- **f.05** Draw a diagram of a VQ-VAE and its computational graph
-- **f.06** Describe the function of the 'cdist' function in PyTorch in the context of VQ-VAEs.
-- **f.07** What is the responsibility of the decoder in a VQ-VAE, and how does it utilize discrete codes for data reconstruction or generation?
-- **f.08** Discuss the types of losses used in training a VQ-VAE, specifically reconstruction, codebook, and commitment loss.
-- **f.09** Explain the practical steps involved in training a VQ-VAE on the MNIST dataset.
-- **f.10** Explain how to generate images from random codes in a VQ-VAE and the insights it provides.
+- **f.01** What is a Vector Quantized Variational Autoencoder (VQ-VAE)? <br>
+**Response**: è un tipo di rete neurale che combina gli aspetti del VAE e la vector quantization in modo da imparare un **rappresentazione discreta** dei dati.
+![VQ-VAE](./images/vqvae.png)
+- **f.02**/**f.03** Explain the process of mapping input data to a continuous latent space and then to discrete codes in a VQ-VAE. How does the vector quantization process work in a VQ-VAE, and what is the role of the codebook?
+**Response**: la prima cosa da sapere è che il codebook è una matrice di m righe e p colonne (le righe sono i code nel quale i dati vengono quantizzati). <br>
+![Codebook](./images/codebook.png) <br>
+La rappresentazione continua in uscita dall'encoder viene riorganizzata in una matrice che ha lo stesso numero di colonne del notebook (p) e come numero di righe il numero di codice desiderati per l'encoding (k). Il processo di quantizzazione è il seguente: 
+  - Per ogni vettore output dell'encoder si calcola la distanza rispetto a ogni codice del codebook
+  - Il risultato viene memorizzato in una matrice
+  - Per ogni riga, viene scelto l'argmin, il quale sarà l'indice del codebook. <br>
+  L'immagine riassume il processo di quantizzazione, mostrando però il codebook trasposto:
+  ![Quantization](./images/quantization.png) <br>
+- **f.04** How does the quantization trick work? <br>
+**Response**: Per quanto visto fino ad ora l'archiettettura risulta:
+  ![Quantization problem](./images/quantization-problem.png) <br>
+  Si utilizza il seguente trucco '(q-x).detach() + x' in modo tale da staccare la parte del grafo computazionale che arriva a q (non è differenziabile), ma riaggungendo x in mdo tale da non perdere informazione. Sostanzialmente stiamo prendendo dq e viene copiato in dx: è matematicamente sbagliato, ma funziona quando q e x hanno valori molto vicini (che è il nostro obiettivo). Per questo motivo, inizialmente i VQ-VAE sono instabili, dato che q e x non posseggono valori vicini tra loro durante i primi passi dell'allenamento.
+   ![Quantization trick](./images/quantization-trick.png)
+- **f.06** Describe the function of the 'cdist' function in PyTorch in the context of VQ-VAEs. <br>
+**Response**: la funzione cdist calcola la distanza tra due matrici. Vedi risposta a *f.03* per la sua utilità (quantization process)
+- **f.07** What is the responsibility of the decoder in a VQ-VAE, and how does it utilize discrete codes for data reconstruction or generation? <br>
+**Response**: Il decoder seleziona le righe dal codebook, dati i codice che riceve in ingresso.
+- **f.08** Discuss the types of losses used in training a VQ-VAE, specifically reconstruction, codebook, and commitment loss. <br>
+**Response**: 
+  - **Reconstruction loss**: Serve per addestrare il modello (encoder and decoder) a ridurre al minimo la discrepanza tra i dati di input originali e i dati di output ricostruiti
+   - **Codebook loss**: Serve per addestrare il codebook ad avere vettori più vicini a quelli prodotti dal codificatore
+   - **Commitment loss**: Serve per addestrare il codificatore a produrre vettori più vicini a quelli del codebook, assicurando che la rappresentazione latente di ogni punto dati sia fortemente associata a una singola voce del codebook. <br>
+   Un modo di usarle è: loss = (&alpha;) * Reconstruction error + (&beta;) * (commit + codebook)
 
 ## g. Generative Adversarial Networks
 
