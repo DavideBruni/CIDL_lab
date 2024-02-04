@@ -166,7 +166,7 @@ Notes:
 ![Reparametrization](./images/trick-formula.png) <br>
 L'architettura diventa: <br>
 ![Reparametrization architecture](./images/trick.png) <br>
-**ATTENZIONE: Tieni a mente che mu e sigma sono due parametri che la rete deve imparare! **
+**ATTENZIONE: Tieni a mente che mu e sigma sono due parametri che la rete deve imparare!**
 - **e.10** Why VAEs are a 'generative' architecture? <br> 
 **Response**: perchè la rete imparara una rappresentazione stocastica dei dati.
 - **e.11** What is the Kullback-Leibler divergence, and how is it used in VAEs? <br>
