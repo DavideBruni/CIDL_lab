@@ -192,9 +192,9 @@ La rappresentazione continua in uscita dall'encoder viene riorganizzata in una m
 - **f.04** How does the quantization trick work? <br>
 **Response**: Per quanto visto fino ad ora l'archiettettura risulta:
   ![Quantization problem](./images/quantization-problem.png) <br>
-  Si utilizza il seguente trucco '(q-x).detach() + x' in modo tale da staccare la parte del grafo computazionale che arriva a q (non è differenziabile), ma riaggungendo x in mdo tale da non perdere informazione. Sostanzialmente stiamo prendendo dq e viene copiato in dx: è matematicamente sbagliato, ma funziona quando q e x hanno valori molto vicini (che è il nostro obiettivo). Per questo motivo, inizialmente i VQ-VAE sono instabili, dato che q e x non posseggono valori vicini tra loro durante i primi passi dell'allenamento.
+  Si utilizza il seguente trucco `(q-x).detach() + x` in modo tale da staccare la parte del grafo computazionale che arriva a q (non è differenziabile), ma riaggungendo x in mdo tale da non perdere informazione. Sostanzialmente stiamo prendendo dq e viene copiato in dx: è matematicamente sbagliato, ma funziona quando q e x hanno valori molto vicini (che è il nostro obiettivo). Per questo motivo, inizialmente i VQ-VAE sono instabili, dato che q e x non posseggono valori vicini tra loro durante i primi passi dell'allenamento.
    ![Quantization trick](./images/quantization-trick.png)
-- **f.06** Describe the function of the 'cdist' function in PyTorch in the context of VQ-VAEs. <br>
+- **f.06** Describe the function of the `cdist` function in PyTorch in the context of VQ-VAEs. <br>
 **Response**: la funzione cdist calcola la distanza tra due matrici. Vedi risposta a *f.03* per la sua utilità (quantization process)
 - **f.07** What is the responsibility of the decoder in a VQ-VAE, and how does it utilize discrete codes for data reconstruction or generation? <br>
 **Response**: Il decoder seleziona le righe dal codebook, dati i codice che riceve in ingresso.
@@ -223,11 +223,11 @@ Train the **discriminator**, details:
 - Dai in ingresso i dati fake al discriminatore e calcola l'error rispetto alla label Fake
 - Calcola la media dei due errori
 - Calcola il gradiente dell'errore e aggiorna i pesi del discriminatore <br>
-'''
+```
 loss = (fake_loss + real_loss) / 2    
 loss.backward()
 optimizer.step()
-'''
+```
 <br>
 Train the **generator**, details: 
 - Genera dati finti usando il generatore
