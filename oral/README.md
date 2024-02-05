@@ -237,7 +237,7 @@ Train the **generator**, details:
 - **g.07**/**g.08**  What is an Auxiliary Classifier GAN (ACGAN), and how does it differ from standard GANs? Discuss the challenges in training GANs and strategies to overcome them. <br>
 **Response**: Una ACGAN è una variante della GAN che integra un classificatore all'interno del discriminatore: è ideale per la creazione di immagini condizionate (e per ogni task che richiede classi specifiche)
 ![GEN-ACGAN](./images/gen-train.png) <br>
-![DISCR-ACGAN](./images/discr-train.png) <br>
+![DISCR-ACGAN](./images/discr-acgan.png) <br>
 Allenare queste reti è un processo molto instabile, ma ci sono alcuni trick noti:
 - Normalizzare le immagini tra -1 e 1
 - Usare CNN invece di MLP
