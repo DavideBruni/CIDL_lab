@@ -234,10 +234,18 @@ Train the **generator**, details:
 - Dai in ingresso i dati fake al discriminatore e calcola l'error rispetto alla label **Real**
 - Calcola il gradiente dell'errore e aggiorna i pesi del generatore
 
-- **g.07** What is an Auxiliary Classifier GAN (ACGAN), and how does it differ from standard GANs?
-- **g.08** Discuss the challenges in training GANs and strategies to overcome them.
-- **g.09** Describe the process of training a Deep Convolutional GAN (DCGAN) on the MNIST dataset.
-- **g.10** How can the balance between randomness and class information be maintained in an ACGAN?
+- **g.07**/**g.08**  What is an Auxiliary Classifier GAN (ACGAN), and how does it differ from standard GANs? Discuss the challenges in training GANs and strategies to overcome them. <br>
+**Response**: Una ACGAN è una variante della GAN che integra un classificatore all'interno del discriminatore: è ideale per la creazione di immagini condizionate (e per ogni task che richiede classi specifiche)
+![GEN-ACGAN](./images/gen-train.png) <br>
+![DISCR-ACGAN](./images/discr-train.png) <br>
+Allenare queste reti è un processo molto instabile, ma ci sono alcuni trick noti:
+- Normalizzare le immagini tra -1 e 1
+- Usare CNN invece di MLP
+- Usare BatchNorm2d ad ogni layer
+- Evitare MaxPool2d, usare stride
+- RImuovere Fully connected layer per deep architecture
+- Inizializzare i pesi della convuluzione cosi: normal mean 0, std 0.02
+- Inizializzare i pesi del batchnorm cosi: normal mean 1, std 0.02
 
 ## h. Advanced Architectures
 
